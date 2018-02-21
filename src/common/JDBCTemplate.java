@@ -1,26 +1,23 @@
 package common;
 
-import java.sql.*;
-import java.util.*;
-import java.io.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 public class JDBCTemplate {
 	public static Connection getConnection() {
 		Connection con = null;
-		Properties prop = new Properties();
-
+		DataSource ds;
 		try {
-			String currentPath = JDBCTemplate.class
-					.getResource("./").getPath();
-			prop.load(new FileReader(currentPath + "driver.properties"));
-			String driver = prop.getProperty("driver");
-			String url = prop.getProperty("url");
-			String user = prop.getProperty("user");
-			String pwd = prop.getProperty("passwd");
-
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, user, pwd);
+			Context init = new InitialContext();
+			ds = (DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+			con = ds.getConnection();
 			
+			//기본값은 true
 			con.setAutoCommit(false);
 			
 		} catch (Exception e) {
