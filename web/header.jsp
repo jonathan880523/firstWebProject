@@ -51,6 +51,7 @@
 <%-- <%
 	if(member == null){  //로그인하지 않았다면
 %> --%>
+	<c:if test="${empty member}">
 
 <form action="login" method="post" class="login">
 <table class="login" width="250" cellpadding="0" cellspacing="0" bgcolor="yellow">
@@ -64,6 +65,8 @@
 </table>
 </form>
 <%-- <% }else{ %> --%>
+	</c:if>
+	<c:if test="${not empty member}">
 <table class="login" width="250" cellpadding="0" cellspacing="0" bgcolor="yellow">
 	<tr><td>${member.name}<%-- <%= member.getName() %> 님</td> --%>
 	<td><a href="/first/logout">로그아웃</a></td></tr>
@@ -74,6 +77,8 @@
 	<tr><td colspan="2" align="center"></td></tr>
 </table>
 <%-- <% } %> --%>
+</c:if>
+	
 <nav>
 	<ul>
 		<li><a href="/first/nlist">공지사항</a></li>

@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,notice.model.vo.Notice,member.model.vo.Member" %>    
-<%
+<%@ page import="java.util.*,notice.model.vo.Notice,member.model.vo.Member" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%-- <%
 	ArrayList<Notice> list = (ArrayList<Notice>)request.getAttribute("list");
 	//Member member = (Member)session.getAttribute("member");
-%>    
+%> --%>
+	<c:set var="list" value="${list}" scope="request"/>
 <!DOCTYPE>
 <html>
 <head>
@@ -18,7 +20,8 @@
 
 </head>
 <body>
-<%@ include file="../../header.jsp" %>
+<%-- <%@ include file="../../header.jsp" %> --%>
+<c:import url="../../header.jsp"/>
 <br style="clear:both;">
 <h1 align="center">공지글 목록 보기</h1>
 <br><br>
@@ -29,44 +32,57 @@
 <input type="submit" value="제목 검색">
 </form>
 </div><br>
-<% if(member != null){ %>
+<%-- <% if(member != null){ %> --%>
+<c:if test="${not empty member}">
 	<div align="center">
 	<button onclick="show();">글쓰기</button> 
 	</div>
-<% } %>
+</c:if>
+<%-- <% } %> --%>
 <br style="clear:both;">
 <table align="center" width="600" border="1" cellspacing="0" style="clear:right;">
 <tr bgcolor="#99ccff"><th>번호</th><th>제목</th><th>작성자</th>
 <th>올린날짜</th><th>첨부파일</th></tr>
-<%
+<%-- <%
 	for(Notice n : list){
-%>
-<tr><td align="center"><%= n.getNoticeNo() %></td>
+%> --%>
+<c:forEach var="n" items="${list}" varStatus="status">
+<tr><td align="center">${n.noticeNo}<%-- <%= n.getNoticeNo() %> --%></td>
 	<td>
-	<% if(member != null){ %>
-		<a href="/first/ndetail?no=<%= n.getNoticeNo() %>">
-		<%= n.getNoticeTitle() %></a>
-	<% }else{ %>
-		<%= n.getNoticeTitle() %>
-	<% } %>
+	<%-- <% if(member != null){ %> --%>
+	<c:if test="${not empty member}">
+	<c:url var="ndetail" value="/ndetail"/>
+		<c:param name="noticeNo" value="${n.noticeNo}"/>
+		<a href="${ndetail}<%-- /first/ndetail?no=<%= n.getNoticeNo() %> --%>">
+		${n.noticeTitle}<%-- <%= n.getNoticeTitle() %> --%></a>
+	</c:if>
+	<%-- <% }else{ %> --%>
+	<c:if test="${empty member}">
+		${n.noticeTitle}<%-- <%= n.getNoticeTitle() %> --%>
+	<%-- <% } %> --%>
+	</c:if>
 	</td>
-	<td align="center"><%= n.getNoticeWriter() %></td>
-	<td align="center"><%= n.getNoticeDate() %></td>
+	<td align="center">${n.noticeWriter}<%-- <%= n.getNoticeWriter() %> --%></td>
+	<td align="center">${n.noticeDate}<%-- <%= n.getNoticeDate() %> --%></td>
 	<td align="center">
-	<% if(n.getFilePath() != null){ %>
+	<c:if test="${not empty n.filePath}"><%-- <% if(n.getFilePath() != null){ %> --%>
 		◎
-	<% }else{ %>
+	<%-- <% }else{ %> --%>
+	</c:if>
+	<c:if test="${empty n.filePath}">
 		&nbsp;
-	<% } %>
+	<%-- <% } %> --%>
+	</c:if>
 	</td></tr>
-<% } %>
+<%-- <% } %> --%>
+</c:forEach>
 </table>
 <p align="center">
 <a href="/first/index.jsp">시작페이지로 이동</a> &nbsp;
 <a href="/first/nlist">목록 전체 보기</a>
 </p>
 <br><br><br><br><br><br><br><br>
-<%@ include file="../../footer.html" %>
+<c:import url="/footer.html"/>
 </body>
 </html>
 

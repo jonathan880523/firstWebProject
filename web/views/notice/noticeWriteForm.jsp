@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="member.model.vo.Member" %>    
-<%
+<%@ page import="member.model.vo.Member" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%-- <%
 	Member member = (Member)session.getAttribute("member");
-%>    
+%> --%>
+	<c:set var="member" value="${member}" scope="session" />    
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +20,7 @@
 	<tr><td>제목</td>
 	   <td><input type="text" size="50" name="title"></td></tr>
 	<tr><td>작성자</td>
-	   <td><input type="text" name="writer" readonly value="<%= member.getId() %>"></td></tr>
+	   <td><input type="text" name="writer" readonly value="${member.id}<%-- <%= member.getId() %> --%>"></td></tr>
 	<tr><td>첨부파일</td>
 		<td><input type="file" name="file"></td></tr>	
 	<tr><td>내용</td>
